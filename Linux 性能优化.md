@@ -35,4 +35,3 @@
 ### 其他
 
 1. 查看OOM的进程 `dmesg |grep -E ‘kill|oom|out of memory`
-
