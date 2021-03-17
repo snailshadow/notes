@@ -77,8 +77,6 @@
     - 硬链接：本质上是同一个文件，innodeId相同，不能跨分区，删除无影响，不支持目录
     - 软连接：本质上是不同的文件，innodeId不同，能跨分区，删除源文件软连接不可用，支持目录
 
-18. grep 过滤注释行  `# grep  -v -e ^[[:space:]].*# -e ^# -e ^$ 1.txt`
-
 ## 2 基础命令
 
 ### 2.1 查看硬件信息
@@ -116,7 +114,7 @@
 | 显示特定档案所属套件名称 | rpm -qf /path/to/file                                        | dpkg -S /path/to/file                                        |
 | 显示指定套件是否安装     | rpm -q softwarename (只显示套件名称) rpm -qi softwarename (显示套件资讯) | dpkg -l softwarename (小写L,只列出简洁资讯) dpkg -s softwarename (显示详细资讯) |
 
-### 2.5 未分组
+### 2.5  tr
 
 tr命令：转换和删除字符
 
@@ -124,6 +122,17 @@ tr命令：转换和删除字符
 $ tr 'a-z' 'A-Z' </etc/issue  # 小写字母转换为大写字母
 $ tr -d 'abc' </etc/fstab # 删除abc任意字符
 ```
+
+### 2.6 grep
+
+1. grep 过滤注释行  `# grep  -v -e ^[[:space:]].*# -e ^# -e ^$ 1.txt`
+2. 单词匹配
+   - 词首/词尾   `# grep "\bhell" 1.txt    or   # grep "hell\b" 1.txt`
+   - 整个单词    `# grep "\bhell\b" 1.txt`
+3. 分组  `# grep "\(test\)\{3\}" 1.txt` 
+4. 逻辑或  `# grep "root\|admin" /etc/passwd` 等价于 `# grep -E "root|admin" /etc/passwd`
+
+ 
 
 ## 3 IO重定向
 
