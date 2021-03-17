@@ -35,3 +35,5 @@
 ### 其他
 
 1. 查看OOM的进程 `dmesg |grep -E ‘kill|oom|out of memory`
+
+![image-20210317224330792](https://cdn.jsdelivr.net/gh/snailshadow/notes/img/20210317224332.png)
