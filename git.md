@@ -80,10 +80,6 @@ $ cd project_name
 
 ### 2.4.1 基础命令
 
-<img src="C:\Users\tiany\AppData\Roaming\Typora\typora-user-images\image-20210216113956640.png" alt="image-20210216113956640" style="zoom:40%;" align='left'/>
-
-    ```shell
-# 基础操作
 $ git add filename # 将文件/目录 纳入git管理，添加文件/目录到暂存区
 $ git rm filename # 删除文件(删除工作区和暂存区的文件)
 $ git mv oldfilename newfilename # 重命名文件
@@ -98,7 +94,8 @@ $ git reset --hard commitId # 版本回滚到某一个commit，且暂存区和�
 $ git push -f origin branchname # 强制将本地分支版本push到远端分支。会导致commit丢失，禁止使用。
 $ git checkout --  file01 file02 # 将工作区(checkout)恢复成暂存区，场景：工作区的最新版本不如暂存区的版本好。
 
-# commit操作
+### 2.4.2 commit操作
+
 $ git commit -m'add file' # 提交到本地仓库
 $ git commit -am'add and commit file' # 添加文件到暂存区，并提交到本地仓库
 $ git commit --amend # 对当前分支，最近一次commit的message做变更
@@ -107,32 +104,37 @@ $ git rebase -i 父commitId  #连续的commit合并，s commit合并
 $ git rebase -i 父commitId  #不连续的commit合并，1，调整顺序，将需要合并的放到一起 2，s commit合并
 $ git rebase --continue # 继续rebase操作
 
-# 远端仓库
+### 2.4.3 远端仓库
+
 $ git remote -v # 查看远端仓库列表
 $ git remote add remotename file:///d/git_learn/backup/zhineng.gi # 添加远端仓库（本地智能）
 $ git push --set-upstream remotename localname # 将本地仓库推送到远端仓库
 
-# object操作
+### 2.4.4 object操作
+
 $ git cat-file -t fc6143fe0bd # 查看对象类型 例如commit/tag/treea/blob
 $ git cat-file -p fc6143fe0bd # 查看对象内容
 
-# 版本历史比较
+## 2.5 版本历史比较
+
 $ git diff commitid01 commitid02 [-- file01 ]# 比较2个commitId
 $ git diff branch01 branch02 # 比较2个分支
 $ git diff branch01 branch02 -- file01  # 比较2个分支的指定文件差异
 $ git diff HEAD HEAD^ # 比较最新版本和上一个版本的差异 HEAD~1,HEAD~2 <==> HEAD^^
-# 版本历史与暂存区比较
+### 2.5.1 版本历史与暂存区比较
+
 ```shell
 $ git diff --cached # 暂存区和HEAD(当前版本)比较
 ```
 
-# 暂存区与工作区比较
+### 2.5.2 暂存区与工作区比较
+
 ```shell
 $ git diff
 $ git diff --  file01 file02 ......   # 比较指定文件的内容
 ```
 
-### 2.4.3 查看版本历史
+### 2.5.3 查看版本历史
 
 - 命令行查看版本历史
 
@@ -151,9 +153,7 @@ $ git log --oneline --all -n3 --graph #所有分支最近四次版本历史
 $ gitk
 ```
 
-![image-20210216142137529](C:\Users\tiany\AppData\Roaming\Typora\typora-user-images\image-20210216142137529.png)
-
-### 2.4.4 分支管理
+## 2.6 分支管理
 
 ```shell
 $ git branch -v # 查看本地分支信息，且当前分支前面有“*”号标记
@@ -167,7 +167,7 @@ $ git checkout  -b  mybranch origin/mybranch #去远程分支并分化一个新�
 $ git checkout -b branchname commitid  # -b 创建并切换到分支
 ```
 
-### 2.4.5  git的备份
+## 2.7 git的备份
 
  ***常用的传输协议***
 
@@ -186,8 +186,6 @@ $ git checkout -b branchname commitid  # -b 创建并切换到分支
 ***备份特点***
 
 - 多点备份
-
-![image-20210216183127034](C:\Users\tiany\AppData\Roaming\Typora\typora-user-images\image-20210216183127034.png )
 
 ```shell
 # 本地备份
