@@ -138,7 +138,9 @@ $ tr -d 'abc' </etc/fstab # 删除abc任意字符
 
    `ss -nt |grep ESTAB |tr -s ' ' :|cut -d: -f6 |sort |uniq -c |sort -nr |head -n 3`
 
-2. 
+2. 2
+3. 3
+4. 4
 
 ## 3 IO重定向
 
