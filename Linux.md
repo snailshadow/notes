@@ -132,7 +132,11 @@ $ tr -d 'abc' </etc/fstab # 删除abc任意字符
 3. 分组  `# grep "\(test\)\{3\}" 1.txt` 
 4. 逻辑或  `# grep "root\|admin" /etc/passwd` 等价于 `# grep -E "root|admin" /etc/passwd`
 
- 
+### 2.7  ss
+
+1. 查看链接服务器最多的IP地址:
+
+   `ss -nt |grep ESTAB |tr -s ' ' :|cut -d: -f6 |sort |uniq -c |sort -nr |head -n 3`
 
 ## 3 IO重定向
 
