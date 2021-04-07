@@ -138,9 +138,10 @@ $ tr -d 'abc' </etc/fstab # 删除abc任意字符
 
    `ss -nt |grep ESTAB |tr -s ' ' :|cut -d: -f6 |sort |uniq -c |sort -nr |head -n 3`
 
-2. 2
-3. 3
-4. 4
+
+### 2.8 ps
+
+1. 查看僵尸进程 ps -A -ostat,ppid,pid,cmd | grep -e '^[zZ]'
 
 ## 3 IO重定向
 
