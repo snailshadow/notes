@@ -4,7 +4,7 @@
 
 1. 开源协议
 
-![image-20210311163509982](C:\Users\Collin.Xia\AppData\Roaming\Typora\typora-user-images\image-20210311163509982.png)
+
 
 2. Linux镜像网站
    - CentOS
@@ -77,6 +77,16 @@
     - 硬链接：本质上是同一个文件，innodeId相同，不能跨分区，删除无影响，不支持目录
     - 软连接：本质上是不同的文件，innodeId不同，能跨分区，删除源文件软连接不可用，支持目录
 
+18. JDK配置环境变量
+
+```shell
+$ vim /etc/profile
+export JAVA_HOME=/usr/lib/jvm/java-1.8.0_171
+export JRE_HOME=$JAVA_HOME/jre 
+export PATH=$PATH:$JAVA_HOME/bin:$JRE_HOME/bin
+export CLASSPATH=.:$JAVA_HOME/lib/dt.jar:$JAVA_HOME/lib/tools.jar:$JRE_HOME/lib
+```
+
 ## 2 基础命令
 
 ### 2.1 查看硬件信息
@@ -107,6 +117,8 @@
 
 ### 2.4 包管理
 
+1. dpkg 
+
 | ↘                        | rpm                                                          | dpkg                                                         |
 | ------------------------ | ------------------------------------------------------------ | ------------------------------------------------------------ |
 | 显示所有已安装的套件名称 | rpm -qa                                                      | dpkg -l (小写L)                                              |
@@ -114,18 +126,34 @@
 | 显示特定档案所属套件名称 | rpm -qf /path/to/file                                        | dpkg -S /path/to/file                                        |
 | 显示指定套件是否安装     | rpm -q softwarename (只显示套件名称) rpm -qi softwarename (显示套件资讯) | dpkg -l softwarename (小写L,只列出简洁资讯) dpkg -s softwarename (显示详细资讯) |
 
+2. apt-file 
+
+   搜索文件/命令
+
+```shell
+$ apt install apt-file
+$ apt update
+$ apt list locate  或者 apt list |grep locate
+$ apt search locate
+```
+
+
+
+
+
 ### 2.5  tr
 
-tr命令：转换和删除字符
+tr命令：转换，删除，合并重复字符
 
 ```bash
 $ tr 'a-z' 'A-Z' </etc/issue  # 小写字母转换为大写字母
 $ tr -d 'abc' </etc/fstab # 删除abc任意字符
+$ df | grep '^/dev/' |tr -s ' ' %|cut -d% -f5|sort -n|tail -1 #-s 合并重复字符
 ```
 
 ### 2.6 grep
 
-1. grep 过滤注释行  `# grep  -v -e ^[[:space:]].*# -e ^# -e ^$ 1.txt`
+1. grep 过滤注释行和空行  `# grep  -v -e ^[[:space:]].*# -e ^# -e ^$ 1.txt`
 2. 单词匹配
    - 词首/词尾   `# grep "\bhell" 1.txt    or   # grep "hell\b" 1.txt`
    - 整个单词    `# grep "\bhell\b" 1.txt`
@@ -138,10 +166,26 @@ $ tr -d 'abc' </etc/fstab # 删除abc任意字符
 
    `ss -nt |grep ESTAB |tr -s ' ' :|cut -d: -f6 |sort |uniq -c |sort -nr |head -n 3`
 
+<<<<<<< HEAD
 
 ### 2.8 ps
 
 1. 查看僵尸进程 ps -A -ostat,ppid,pid,cmd | grep -e '^[zZ]'
+=======
+### 2.8  vim
+
+1. 精确匹配单词	 /\\<hello\\>
+2. 忽略大消息 :set ic(ignorecase 的缩写)   或者 \c搜索的内容
+
+### 2.9 ps
+
+1. 查看进程包含多少线程  cat /proc/pid/status or ps -T pid
+
+### 2.10 top
+
+1. 查看某进程下各个线程占用的资源    top -H -p pid
+2. 
+>>>>>>> b2779f1a52b5538cfa1f11c99ab3c1e2365a8fd6
 
 ## 3 IO重定向
 
@@ -171,7 +215,7 @@ STDERR 通过管道转发，使用 "2>&1 |"  或者 "|&" 实现
 
 
 
-## DNS
+## 4 DNS
 
 - @：也就是ZONE_NAME，NS(Name Server): ZONE_NAME --> FQDN
 - MX(Mail eXchanger): ZONE_NAME --> FQDN
@@ -179,6 +223,10 @@ STDERR 通过管道转发，使用 "2>&1 |"  或者 "|&" 实现
 - AAAA：FQDN-->IPv6
 - PTR(pointer)：IP-->FQDN
 - CNAME(Canonical NAME): FQDN-->FQDN
+
+
+
+
 
 
 

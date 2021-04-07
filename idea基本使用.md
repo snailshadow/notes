@@ -1,8 +1,9 @@
-	## 配置文件
+## 配置文件
 
+```
 D:\program files\IntelliJ IDEA 2020.3.2\bin\idea.properties
-
 D:\program files\IntelliJ IDEA 2020.3.2\bin\idea64.exe.vmoptions
+```
 
 ## 快捷键
 
