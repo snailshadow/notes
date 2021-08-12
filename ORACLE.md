@@ -33,6 +33,10 @@ ORDER BY ERROR_DT DESC) aa WHERE eventTime IS NOT NULL;
 
 ### 3.1
 
+### 3.2
+
+
+
 
 
 
