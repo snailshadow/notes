@@ -224,6 +224,23 @@ STDERR 通过管道转发，使用 "2>&1 |"  或者 "|&" 实现
 - PTR(pointer)：IP-->FQDN
 - CNAME(Canonical NAME): FQDN-->FQDN
 
+## 5 自签名ssl证书
+
+```shell
+#创建证书存放目录
+$ mkdir /etc/httpd/conf/certs;cd /etc/httpd/certs
+#自签CA证书
+$ openssl req -newkey rsa:4096 -nodes -sha256 -keyout ca.key -x509 -days 3650 -out ca.crt
+#自制key和csr文件
+$ openssl req -newkey rsa:4096 -nodes -sha256 -keyout www.httpsproxy.net.key -out www.httpsproxy.net.csr
+#签发证书
+$ openssl x509 -req -days 3650 -in www.httpsproxy.net.csr -CA ca.crt -CAkey ca.key -CAcreateserial -out www.httpsproxy.net.crt
+#验证证书内容
+$ openssl x509 -in www.httpsproxy.net.crt -noout -text
+```
+
+
+
 
 
 
