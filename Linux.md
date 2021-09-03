@@ -239,6 +239,126 @@ $ openssl x509 -req -days 3650 -in www.httpsproxy.net.csr -CA ca.crt -CAkey ca.k
 $ openssl x509 -in www.httpsproxy.net.crt -noout -text
 ```
 
+# 部署服务
+
+## 1 apache服务
+
+1. 官网下载源码包:http://archive.apache.org/dist/httpd/
+2. 编译
+
+```bash
+$ ./configure --prefix=/apps/httpd-2.4.29 \
+--enable-proxy --enable-proxy-http --enable-proxy-ftp --enable-proxy-fcgi --enable-proxy-fdpass --enable-proxy-scgi --enable-proxy-connect --enable-proxy-ajp --enable-proxy-balancer --enable-proxy-express \
+--enable-lbmethod-byrequests --enable-lbmethod-bytraffic --enable-lbmethod-bybusyness --enable-lbmethod-heartbeat \
+--enable-proxy-hcheck \
+--enable-lbmethod-heartbeat --enable-heartmonitor --enable-ssl --enable-ssl-staticlib-deps
+```
+
+3. 开启的模块
+
+```shell
+LoadModule authn_file_module modules/mod_authn_file.so
+LoadModule authn_core_module modules/mod_authn_core.so
+LoadModule authz_host_module modules/mod_authz_host.so
+LoadModule authz_groupfile_module modules/mod_authz_groupfile.so
+LoadModule authz_user_module modules/mod_authz_user.so
+LoadModule authz_core_module modules/mod_authz_core.so
+LoadModule access_compat_module modules/mod_access_compat.so
+LoadModule auth_basic_module modules/mod_auth_basic.so
+LoadModule watchdog_module modules/mod_watchdog.so
+LoadModule filter_module modules/mod_filter.so
+LoadModule mime_module modules/mod_mime.so
+LoadModule log_config_module modules/mod_log_config.so
+LoadModule env_module modules/mod_env.so
+LoadModule headers_module modules/mod_headers.so
+LoadModule setenvif_module modules/mod_setenvif.so
+LoadModule version_module modules/mod_version.so
+LoadModule proxy_module modules/mod_proxy.so
+LoadModule proxy_connect_module modules/mod_proxy_connect.so
+LoadModule proxy_ftp_module modules/mod_proxy_ftp.so
+LoadModule proxy_http_module modules/mod_proxy_http.so
+LoadModule proxy_fcgi_module modules/mod_proxy_fcgi.so
+LoadModule proxy_scgi_module modules/mod_proxy_scgi.so
+LoadModule proxy_uwsgi_module modules/mod_proxy_uwsgi.so
+LoadModule proxy_fdpass_module modules/mod_proxy_fdpass.so
+LoadModule proxy_wstunnel_module modules/mod_proxy_wstunnel.so
+LoadModule proxy_ajp_module modules/mod_proxy_ajp.so
+LoadModule proxy_balancer_module modules/mod_proxy_balancer.so
+LoadModule proxy_express_module modules/mod_proxy_express.so
+LoadModule proxy_hcheck_module modules/mod_proxy_hcheck.so
+LoadModule session_module modules/mod_session.so
+LoadModule session_cookie_module modules/mod_session_cookie.so
+LoadModule session_dbd_module modules/mod_session_dbd.so
+LoadModule slotmem_shm_module modules/mod_slotmem_shm.so
+LoadModule ssl_module modules/mod_ssl.so
+LoadModule lbmethod_byrequests_module modules/mod_lbmethod_byrequests.so
+LoadModule lbmethod_bytraffic_module modules/mod_lbmethod_bytraffic.so
+LoadModule lbmethod_bybusyness_module modules/mod_lbmethod_bybusyness.so
+LoadModule unixd_module modules/mod_unixd.so
+LoadModule heartmonitor_module modules/mod_heartmonitor.so
+LoadModule status_module modules/mod_status.so
+LoadModule autoindex_module modules/mod_autoindex.so
+LoadModule dir_module modules/mod_dir.so
+LoadModule alias_module modules/mod_alias.so
+```
+
+4. 修改配置文件
+
+```shell
+# httpd.conf 在最后增加
+Include conf.d/*.conf
+# 配置https反向代理
+# cat conf.d/httpd-vhosts.conf 
+Listen 443
+<VirtualHost 10.80.0.14:443>
+
+ServerName rtdm-sas.cn.prod
+ServerAlias rtdm-sas.cn.prod
+ErrorLog "|/usr/sbin/rotatelogs -l -f -c logs/rtdm-sascn.prod_ssl_error.log-%Y%m%d 86400"
+LogFormat "%{Host}i [remote: %h (%a)] [user: %u (%{login}C)] [%{%d/%b/%Y:%T}t.%{msec_frac}t %{%z}t] \"%r\" %>s [dur: %D us (%T s)] [SID=%{JSESSIONID}C] [conn: %P, %X] \"%!200,302,304,401{Content-Type}o\" \"%{U
+ser-agent}i\" \"CALLID=%{CALLID}i\" \"SOAPAction=%{SOAPAction}i\" \"%!200,302,304{X-Requested-With}o\""TransferLog "|/usr/sbin/rotatelogs -l -f -c logs/rtdm-sascn.prod_ssl_access.log-%Y%m%d 86400"
+
+<IfModule mod_ssl.c>
+SSLEngine on
+SSLCertificateFile conf/certs/rtdm-sas.cn.prod.crt
+SSLCertificateKeyFile conf/certs/rtdm-sas.cn.prod.key
+#SSLCertificateChainFile conf/certs/www.httpsproxy.net.crt
+</IfModule>
+<IfModule mod_cache.c>
+CacheDisable /
+</IfModule>
+<Proxy balancer://rtdmcluster/>
+BalancerMember http://47.95.234.142:5000 disablereuse=on 
+#hcmethod=TCP hcinterval=5 hcpasses=2 hcfails=3
+BalancerMember http://10.80.0.11:80 disablereuse=on timeout=2s connectiontimeout=1 
+# hcmethod=TCP hcinterval=5 hcpasses=2 hcfails=3
+</Proxy>
+ProxyPass / balancer://rtdmcluster/
+ProxyPassReverse / balancer://rtdmcluster/
+
+</VirtualHost>
+```
+
+## 2 升级openssl
+
+```shell
+$ yum -y install perl perl-devel gcc gcc-c++
+$ cd /usr/local/src
+$ wget https://github.com/openssl/openssl/archive/OpenSSL_1_1_1c.tar.gz
+$ tar xzvf ./OpenSSL_1_1_1c.tar.gz
+$ cd openssl-OpenSSL_1_1_1c/
+$ ./config
+$ make
+$ make install
+$ mv /usr/bin/openssl /usr/bin/oldopenssl
+$ ln -s /usr/local/bin/openssl /usr/bin/openssl
+$ ln -s /usr/local/lib64/libssl.so.1.1 /usr/lib64/
+$ ln -s /usr/local/lib64/libcrypto.so.1.1 /usr/lib64/
+$ openssl version
+```
+
+
+
 
 
 
