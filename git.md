@@ -88,11 +88,10 @@ $ cd project_name
 ## 2.4 Git 管理命令
 
 ### 2.4.1 基础命令
-
-$ git add filename # 将文件/目录 纳入git管理，添加文件/目录到暂存区
+```shell
+$ git add filename # 将文件/目录 纳入git管理，添加文件/目录到暂存区  
 $ git rm filename # 删除文件(删除工作区和暂存区的文件)
 $ git mv oldfilename newfilename # 重命名文件
-
 $ git add -u # 将所有文件纳入git管理，提交到暂存区，等同于 git add .
 $ git status # 查看git状态，包括分支信息，文件变更信息
 $ git log # 查看版本历史
@@ -102,9 +101,10 @@ $ git reset --hard #清空工作目录和暂存区的所有变更，版本回到
 $ git reset --hard commitId # 版本回滚到某一个commit，且暂存区和工作目录都会到这个版本。后面的commit会丢失 
 $ git push -f origin branchname # 强制将本地分支版本push到远端分支。会导致commit丢失，禁止使用。
 $ git checkout --  file01 file02 # 将工作区(checkout)恢复成暂存区，场景：工作区的最新版本不如暂存区的版本好。
+```
 
 ### 2.4.2 commit操作
-
+```shell
 $ git commit -m'add file' # 提交到本地仓库
 $ git commit -am'add and commit file' # 添加文件到暂存区，并提交到本地仓库
 $ git commit --amend # 对当前分支，最近一次commit的message做变更
@@ -112,24 +112,25 @@ $ git rebase -i 父commitId  #修改历史commit的message。r 修改message, p 
 $ git rebase -i 父commitId  #连续的commit合并，s commit合并
 $ git rebase -i 父commitId  #不连续的commit合并，1，调整顺序，将需要合并的放到一起 2，s commit合并
 $ git rebase --continue # 继续rebase操作
-
+```
 ### 2.4.3 远端仓库
-
+```shell
 $ git remote -v # 查看远端仓库列表
 $ git remote add remotename file:///d/git_learn/backup/zhineng.gi # 添加远端仓库（本地智能）
 $ git push --set-upstream remotename localname # 将本地仓库推送到远端仓库
-
+```
 ### 2.4.4 object操作
-
+```shell
 $ git cat-file -t fc6143fe0bd # 查看对象类型 例如commit/tag/treea/blob
 $ git cat-file -p fc6143fe0bd # 查看对象内容
-
+```
 ## 2.5 版本历史比较
-
+```shell
 $ git diff commitid01 commitid02 [-- file01 ]# 比较2个commitId
 $ git diff branch01 branch02 # 比较2个分支
 $ git diff branch01 branch02 -- file01  # 比较2个分支的指定文件差异
 $ git diff HEAD HEAD^ # 比较最新版本和上一个版本的差异 HEAD~1,HEAD~2 <==> HEAD^^
+```
 ### 2.5.1 版本历史与暂存区比较
 
 ```shell
