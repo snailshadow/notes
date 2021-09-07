@@ -39,6 +39,15 @@ $ git config --global --unset user.name # 删除配置信息
 $ git config --list --global # 查看配置信息
 $ git config --global user.name # 查看指定配置信息
 # 优先级： local>global
+#查
+git config --global --list
+git config --global user.name
+#增
+git config  --global --add user.name jianan
+#删
+git config  --global --unset user.name
+#改
+git config --global user.name jianan
 ```
 
 - 配置user信息
