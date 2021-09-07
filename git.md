@@ -442,7 +442,89 @@ https://docs.github.com/en/github/searching-for-information-on-github/searching-
 
 `git最好学习资料 in:readme stars:>5000`
 
+# 4 FAQ
 
+## 4.1 remote: Support for password authentication was removed on August 13, 2021
+
+​     密码凭证从2021年8月13日开始不能用了，必须使用个人访问令牌（personal access token），就是把你的`密码`替换成`token`
+
+1. 生成自己的token
+
+- 个人页面，找到setting
+
+- 选择developer setting
+
+- 选择personal access tokens，然后点击 generate new token
+
+- 设置token的权限，点击generate token
+
+  ![image-20210907141444782](https://cdn.jsdelivr.net/gh/snailshadow/img/img/20210907141445.png)
+
+2. 将token添加到远程仓库配置
+
+   ```shell
+   git remote set-url origin https://<your_token>@github.com/<USERNAME>/<REPO>.git
+   #<your_token>：换成你自己得到的token
+   #<USERNAME>：是你自己github的用户名
+   #<REPO>：是你的仓库名称
+   #示例：
+   git remote set-url origin https://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@github.com/snailshadow/notes.git
+   ```
+
+## 4.2 There is no tracking information for the current branch
+
+- 一种是直接指定远程master  
+
+  ```shell
+  git pull origin main
+  ```
+
+- 另外一种方法就是先指定本地master到远程的master，然后再去pull
+
+  ```shell
+  git branch --set-upstream-to=origin/main main
+  git pull
+  ```
+
+## 4.3 git设置代理
+
+- 设置SSH协议代理
+
+  ```shell
+  #SSH协议连接的远程仓库。因为git依赖ssh去连接，所以，我们需要配置ssh的socks5代理实现git的代理。在ssh的配置文件~/.ssh/config（没有则新建）使用ProxyCommand配置：
+  #Linux
+  Host github.com
+    User git
+    Port 22
+    Hostname github.com
+    ProxyCommand nc -x 127.0.0.1:10808 %h %p
+  #windows
+  Host bitbucket.org
+    User git
+    Port 22
+    Hostname bitbucket.org
+    ProxyCommand connect -S 127.0.0.1:1080 %h %p
+  ```
+
+- 设置https协议代理
+
+  ```shell
+  #http/https协议，所以可以使用git配套的CMSSW支持的代理协议：SOCKS4、SOCKS5和HTTPS/HTTPS。可通过配置http.proxy配置：
+  # 全局设置
+  git config --global http.proxy socks5://localhost:10808
+  # 本次设置
+  git clone https://github.com/example/example.git --config "http.proxy=127.0.0.1:1080"
+  ```
+
+- 设置git协议代理
+
+  ```shell
+  #使用git协议连接。所以，需要使用CMSSW提供的简单脚本去通过socks5代理访问：git-proxy。配置如下：
+  git config --global core.gitproxy "git-proxy"
+  git config --global socks.proxy "localhost:1080"
+  ```
+
+  
 
 
 
