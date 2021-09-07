@@ -499,11 +499,11 @@ https://docs.github.com/en/github/searching-for-information-on-github/searching-
     Hostname github.com
     ProxyCommand nc -x 127.0.0.1:10808 %h %p
   #windows
-  Host bitbucket.org
+  Host github.com
     User git
     Port 22
-    Hostname bitbucket.org
-    ProxyCommand connect -S 127.0.0.1:1080 %h %p
+    Hostname github.com
+    ProxyCommand connect -S 127.0.0.1:10808 %h %p
   ```
 
 - 设置https协议代理
