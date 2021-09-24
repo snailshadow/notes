@@ -240,7 +240,7 @@ $ openssl x509 -in www.httpsproxy.net.crt -noout -text
 
 # 部署服务
 
-## 1 apache服务
+## 1 apache反向代理
 
 1. 官网下载源码包:http://archive.apache.org/dist/httpd/
 2. 编译
@@ -356,13 +356,74 @@ $ ln -s /usr/local/lib64/libcrypto.so.1.1 /usr/lib64/
 $ openssl version
 ```
 
+## 3 部署NFS
 
+### 3.1 服务端部署NFS
 
+1. 安装NFS
 
+   ```shell
+   $ yum  install  -y nfs-utils
+   ```
 
+2. 配置NFS共享目录
 
+   ```shell
+   $ vim /etc/exports
+   /opt/sas_share 10.67.194.10(rw,sync,no_root_squash,no_subtree_check)
+   /opt/sas_share 10.67.194.11(rw,sync,no_root_squash,no_subtree_check)
+   /opt/sas_share 10.67.194.12(rw,sync,no_root_squash,no_subtree_check)
+   ```
 
+3. 启动NFS服务
 
+   ```shell
+   # 设置开机自启动
+   systemctl  enable  rpcbind.service
+   systemctl  enable  nfs-server.service
+   ## 启动NFS
+   systemctl start rpcbind.service
+   systemctl start nfs-server.service
+   ```
+
+4. 验证NFS服务器启动成功
+
+   ```shell
+   $ rpcinfo -p
+   ```
+
+5. 查看可共享的目录
+
+   ```shell
+   $ exportfs -v
+   /opt/sas_share    	10.67.194.10(sync,wdelay,hide,no_subtree_check,sec=sys,rw,secure,no_root_squash,no_all_squash)
+   $ exportfs -rv
+   exporting 10.67.194.10:/opt/sas_share
+   ```
+
+### 3.2 客户端挂载NFS目录
+
+1. 检查服务端的共享目录
+
+   ```shell
+   $ showmount -e nfs服务器的IP
+   ```
+
+2. 挂载NFS
+
+   ```shell
+   $ mount  -t nfs4 nfs服务器IP:/opt/sas_share     /opt/sas_share
+   ```
+
+3. 开机挂载
+
+   ```shell
+   $ vi  /etc/fstab
+   # 加上
+   nfs服务器IP:/opt/sas_share    /opt/sas_share   nfs4 ro,hard,intr,proto=tcp,port=2049,noauto 0 0
+   ```
+
+   
 
 
 
