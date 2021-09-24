@@ -20,7 +20,7 @@
 
 3. 基础环境设置
 
-- 主机时间同步  `systemctl start chronyd.service;systemctl enable chronyd.service`  
+- 主机时间同步  `apt-get install chrony;systemctl start chrony.service;systemctl enable chrony.service`  
 - 关闭防火墙 `ufw disable;ufw status`  
 - 禁用swap设备 `swapoff -a;vim /etc/fstab #注释所有swap挂载点`  
 
@@ -60,6 +60,7 @@ $ curl https://mirrors.aliyun.com/kubernetes/apt/doc/apt-key.gpg | apt-key add -
 # 修改配置deb配置文件
 $ vim /etc/apt/sources.list.d/kubernetes.list
 deb https://mirrors.aliyun.com/kubernetes/apt/ kubernetes-xenial main
+$ apt update
 # 更新程序包索引并安装程序包
 $ apt install -y kubelet=1.19.14-00 kubeadm=1.19.14-00 kubectl=1.19.14-00
 ```
@@ -72,7 +73,7 @@ $ apt install -y kubelet=1.19.14-00 kubeadm=1.19.14-00 kubectl=1.19.14-00
     $ kubeadm init \
         --image-repository registry.aliyuncs.com/google_containers \
         --kubernetes-version v1.19.0 \
-        --control-plane-endpoint k8s-api.ik8s.io \
+        --control-plane-endpoint k8s-api.ilinux.io \
         --apiserver-advertise-address 10.80.0.71 \
         --pod-network-cidr 10.244.0.0/16 \
         --token-ttl 0
@@ -97,14 +98,14 @@ Run "kubectl apply -f [podnetwork].yaml" with one of the options listed at:
 You can now join any number of control-plane nodes by copying certificate authorities
 and service account keys on each node and then running the following as root:
 
-	kubeadm join k8s-api.ik8s.io:6443 --token j22ete.5jwrhskowc1da1ai \
-    --discovery-token-ca-cert-hash sha256:6b824653ceca70bd54a23ac8a8fb54cddde19f75c3006813aa624328b81874bc \
-    --control-plane 
+	kubeadm join k8s-api.ilinux.io:6443 --token p4xxgq.4laig907o0mnmut0 \
+    --discovery-token-ca-cert-hash sha256:a8089d9719f7ef3f70c067324fe2cf19ebb28afc8cedba3763e290b8c3da4f27 \
+    --control-plane
 # 添加node节点
 Then you can join any number of worker nodes by running the following on each as root:
 
-	kubeadm join k8s-api.ik8s.io:6443 --token j22ete.5jwrhskowc1da1ai \
-    --discovery-token-ca-cert-hash sha256:6b824653ceca70bd54a23ac8a8fb54cddde19f75c3006813aa624328b81874bc
+	kubeadm join k8s-api.ilinux.io:6443 --token p4xxgq.4laig907o0mnmut0 \
+    --discovery-token-ca-cert-hash sha256:a8089d9719f7ef3f70c067324fe2cf19ebb28afc8cedba3763e290b8c3da4f27
 ```
 
 2. 配置kubectl
