@@ -87,6 +87,101 @@ export PATH=$PATH:$JAVA_HOME/bin:$JRE_HOME/bin
 export CLASSPATH=.:$JAVA_HOME/lib/dt.jar:$JAVA_HOME/lib/tools.jar:$JRE_HOME/lib
 ```
 
+### 1.1 自定义 .vimrc
+
+```bash
+# cat ~/.vimrc
+"" #######################################################################
+""定义函数SetTitle，自动插入文件头 
+autocmd BufNewFile *.py,*.cpp,*.sh,*.java exec ":call SetTitle()"
+
+"" shell文件头
+function AddTitlesh()
+    call append(0,"\#!/bin/sh")
+    call append(1,"# ******************************************************")
+    call append(2,"# Author       : Collin.Xia")
+    call append(3,"# Last modified: ".strftime("%Y-%m-%d %H:%M"))
+    call append(4,"# Email        : tianyu29792569@163.com")
+    call append(5,"# blog         : https://www.cnblogs.com/snailshadow")
+    call append(6,"# Filename     : ".expand("%:t"))
+    call append(7,"# Description  : ")
+    call append(8,"# ******************************************************")
+    echohl WarningMsg | echo "Successful in adding copyright." | echohl None
+endf
+
+"" python文件头
+function AddTitlepy()
+    call append(0,"\#!/usr/bin/env python")
+    call append(1,"# ******************************************************")
+    call append(2,"# Author       : Collin.Xia")
+    call append(3,"# Last modified: ".strftime("%Y-%m-%d %H:%M"))
+    call append(4,"# Email        : tianyu29792569@163.com")
+    call append(5,"# blog         : https://www.cnblogs.com/snailshadow")
+    call append(6,"# Filename     : ".expand("%:t"))
+    call append(7,"# Description  : ")
+    call append(8,"# ******************************************************")
+    echohl WarningMsg | echo "Successful in adding copyright." | echohl None
+endf
+
+"" 更新修改时间
+function UpdateTitle()
+     normal m'
+     execute '/# Last modified/s@:.*$@\=strftime(":\t%Y-%m-%d %H:%M")@'
+     normal ''
+     normal mk
+     execute '/# Filename/s@:.*$@\=":\t".expand("%:t")@'
+     execute "noh"
+     normal 'k
+     echohl WarningMsg | echo "Successful in updating the copyright." | echohl None
+endfunction
+
+function TitleDetsh()
+    let n=1
+    while n < 10
+        let line = getline(n)
+        if line =~ '^\#\s*\S*Last\smodified\S*.*$'
+            call UpdateTitle()
+            return
+        endif
+        let n = n + 1
+    endwhile
+    call AddTitlesh()
+endfunction
+
+function TitleDetpy()
+    let n=1
+    while n < 10
+        let line = getline(n)
+        if line =~ '^\#\s*\S*Last\smodified\S*.*$'
+            call UpdateTitle()
+            return
+        endif
+        let n = n + 1
+    endwhile
+    call AddTitlepy()
+endfunction
+
+func SetTitle()
+    "如果文件类型为.sh文件 
+    if &filetype == 'sh'
+        call TitleDetsh() 
+    elseif &filetype == 'python'
+        call TitleDetpy()
+    else
+        call setline(1,"/*")
+        call append(line("."), "* Author: collin.xia")
+        call append(line(".")+1, "* Created Time: ".strftime("%c"))
+        call append(line(".")+2, "*/")
+        call append(line(".")+3, "")
+    endif
+    "新建文件后，自动定位到文件末尾
+    autocmd BufNewFile * normal G
+endfunc
+set paste
+```
+
+
+
 ## 2 基础命令
 
 ### 2.1 查看硬件信息
