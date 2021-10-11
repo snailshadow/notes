@@ -180,6 +180,14 @@ endfunc
 set paste
 ```
 
+### 1.2 vmware网卡变动
+
+```
+linux 加了新网卡，配置文件也改好，但是ifconfig 就是没有这个接口，ifup就报错说不能up这个接口。
+解决方法，把这个文件干掉，重启。这里是记录当前的网卡信息
+/etc/udev/rules.d/70-persistent-net.rules
+```
+
 
 
 ## 2 基础命令
