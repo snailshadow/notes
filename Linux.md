@@ -62,8 +62,6 @@
 
 12. 预定义通配符：man 7 glob
 
-     <img src="C:\Users\Collin.Xia\AppData\Roaming\Typora\typora-user-images\image-20210312161222900.png" alt="image-20210312161222900" style="zoom:65%;" style="margin-left:45px" />
-
 13. 批量修改文件名 `rename 's/txt/txt.bak/'  *.txt`
 
 14. basename 只取文件名（基名），不要路径，dirname 只取路径，不要文件名
@@ -76,8 +74,8 @@
 
     - 硬链接：本质上是同一个文件，innodeId相同，不能跨分区，删除无影响，不支持目录
     - 软连接：本质上是不同的文件，innodeId不同，能跨分区，删除源文件软连接不可用，支持目录
-
-18. JDK配置环境变量
+18. 修改默认编辑器 visudo 语法高亮，修改/etc/profie `export EDITOR=vim` 
+19. JDK配置环境变量
 
 ```shell
 $ vim /etc/profile
@@ -526,9 +524,46 @@ $ openssl version
    nfs服务器IP:/opt/sas_share    /opt/sas_share   nfs4 ro,hard,intr,proto=tcp,port=2049,noauto 0 0
    ```
 
+### 3.3 MySQL5.7 安装
+
+1. 下载，安装官方的yum 仓库
+
+   ```bash
+   # wget -i -c http://dev.mysql.com/get/mysql57-community-release-el7-10.noarch.rpm
+   # yum -y install mysql57-community-release-el7-10.noarch.rpm
+   ```
+
+2. 安装mysql5.7
+
+   ```
+   # yum -y install mysql-community-server
+   ```
+
+3. 启动mysql，修改初始密码
+
+   ```bash
+   # systemctl start  mysqld.service
+   # grep "password" /var/log/mysqld.log
+   2021-12-07T03:07:29.504970Z 1 [Note] A temporary password is generated for root@localhost: K!dJGuQ<l9dh
+   # mysql -uroot -p  # 输入初始密码
+   mysql> SHOW VARIABLES LIKE 'validate_password%';   # 查看密码策略
+   mysql> set global validate_password_policy=0;   # 设置密码策略
+   mysql> set global validate_password_length=1;   
+   mysql> ALTER USER 'root'@'localhost' IDENTIFIED BY '123456';  # 修改初始化密码
+   ```
+
+4. 修改mysql用户权限，可以外部访问
+
+   ```sql
+   mysql> use mysql
+   mysql> select user,host from user;
+   mysql> update user set host='%' where user='root';
+   mysql> flush privileges;
+   mysql> GRANT ALL PRIVILEGES ON *.* TO 'root'@'%' identified by '123456' with grant option;
+   mysql> flush privileges;
+   ```
+
    
-
-
 
 
 
