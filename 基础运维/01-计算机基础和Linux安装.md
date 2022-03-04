@@ -2,25 +2,8 @@
 
 1. 一个完整的计算机系统由硬件(Hardware)系统和软件(Software)系统两大部分组成
 
-![image-20220304154820662](01-计算机基础和Linux安装.assets/image-20220304154820662.png)
 
-2. 计算机硬件
 
-   计算机发展历史：
+![image-20220304161301282](C:/Users/tiany/AppData/Roaming/Typora/typora-user-images/image-20220304161301282.png)
 
-   1. 第一代计算机(1946-1957)       电子管时代
-
-   2. 第二代计算机(1958-1964)       晶体管时代
-
-   3. 第三代计算机(1965-1970)      集成电路时代
-
-   4. 第四代计算机(1971以后)        大规模集成电路时代
-
-3. 操作系统
-
-     ![image-20220304153024994](https://github.com/snailshadow/img/raw/main/img/20220304153026.png)
-
-   主要功能：
-
-   - 硬件驱动
-
+![image-20220304161823322](C:/Users/tiany/AppData/Roaming/Typora/typora-user-images/image-20220304161823322.png)
