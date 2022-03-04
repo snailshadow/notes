@@ -18,7 +18,7 @@
 
 3. 操作系统
 
-    ![image-20220304153024994](https://github.com/snailshadow/img/raw/main/img/20220304153026.png)
+     ![image-20220304153024994](https://github.com/snailshadow/img/raw/main/img/20220304153026.png)
 
    主要功能：
 
