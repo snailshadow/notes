@@ -2,7 +2,7 @@
 
 1. 一个完整的计算机系统由硬件(Hardware)系统和软件(Software)系统两大部分组成
 
- ![image-20220304152237483](https://github.com/snailshadow/img/raw/main/img/20220304152239.png)
+![image-20220304154820662](01-计算机基础和Linux安装.assets/image-20220304154820662.png)
 
 2. 计算机硬件
 
